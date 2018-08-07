@@ -134,6 +134,7 @@ defaultBuildOptsCLI = BuildOptsCLI
     , boptsCLIBuildSubset = BSAll
     , boptsCLIFileWatch = NoFileWatch
     , boptsCLIExec = []
+    , boptsCLIExecBefore = []
     , boptsCLIOnlyConfigure = False
     , boptsCLICommand = Build
     , boptsCLIInitialBuildSteps = False
@@ -148,6 +149,7 @@ data BuildOptsCLI = BuildOptsCLI
     , boptsCLIBuildSubset :: !BuildSubset
     , boptsCLIFileWatch :: !FileWatchOpts
     , boptsCLIExec :: ![(String, [String])]
+    , boptsCLIExecBefore :: ![(String, [String])]
     , boptsCLIOnlyConfigure :: !Bool
     , boptsCLICommand :: !BuildCommand
     , boptsCLIInitialBuildSteps :: !Bool

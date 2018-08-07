@@ -73,6 +73,10 @@ buildOptsParser cmd =
              (long "exec" <>
               metavar "CMD [ARGS]" <>
               help "Command and arguments to run after a successful build")) <*>
+    many (cmdOption
+             (long "exec-before" <>
+              metavar "CMD [ARGS]" <>
+              help "Command and arguments to run before building")) <*>
     switch
         (long "only-configure" <>
          help

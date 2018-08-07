@@ -492,9 +492,6 @@ executePlan :: HasEnvConfig env
 executePlan boptsCli baseConfigOpts locals globalPackages snapshotPackages localPackages installedMap targets plan = do
     logDebug "Executing the build plan"
     bopts <- view buildOptsL
-    withExecuteEnv bopts boptsCli baseConfigOpts locals globalPackages snapshotPackages localPackages (executePlan' installedMap targets plan)
-
-    copyExecutables (planInstallExes plan)
 
     config <- view configL
     menv' <- liftIO $ configProcessContextSettings config EnvSettings
@@ -504,6 +501,15 @@ executePlan boptsCli baseConfigOpts locals globalPackages snapshotPackages local
                     , esLocaleUtf8 = False
                     , esKeepGhcRts = False
                     }
+
+    withProcessContext menv' $
+      forM_ (boptsCLIExecBefore boptsCli) $ \(cmd, args) ->
+      proc cmd args runProcess_
+
+    withExecuteEnv bopts boptsCli baseConfigOpts locals globalPackages snapshotPackages localPackages (executePlan' installedMap targets plan)
+
+    copyExecutables (planInstallExes plan)
+
     withProcessContext menv' $
       forM_ (boptsCLIExec boptsCli) $ \(cmd, args) ->
       proc cmd args runProcess_
